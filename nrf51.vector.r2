@@ -9,7 +9,7 @@ y 4
 Cd 4 48
 
 # store a var of the register were at, if gt 0 then flag it(minus 1 because thumb), increment 4
-"(cortexm0.vector.annotate x,?=`pxWq~:0`;?+f $0 @ `??`-1; s+4)"
+"(cortexm0.vector.annotate x,?=`pv4`;?+f $0 @ `??`-1; s+4)"
 
 f VectorTable_`y~[0]`
 
@@ -71,7 +71,7 @@ s reset_handler_`y~[0]`
 s `pd 20~blx[0]`-2
 
 # now $m exists so label that address (minus-1 because thumb)
-f SystemInit_`y~[0]` @ `pxw 4 @ $m~[1]`-1
+f SystemInit_`y~[0]` @ `pv4 @ $m`-1
 
 
 
@@ -82,7 +82,7 @@ s reset_handler_`y~[0]`
 s `pd 20~bx[1]`-2
 
 # now $m exists so label that address (minus-1 because thumb)
-f startup_`y~[0]` @ `pxw 4 @ $m~[1]`-1
+f startup_`y~[0]` @ `pv4 @ $m`-1
 
 
 
@@ -93,10 +93,10 @@ s startup_`y~[0]`
 s `pd 20~bx[1]`-2
 
 # now $m exists so label that address (minus-1 because thumb)
-f main_`y~[0]` @ `pxw 4 @ $m~[1]`-1
+f main_`y~[0]` @ `pv4 @ $m`-1
 
 
 #seek back to where we started
 s `y~[0]`
 
-?e stack top is `pxWq~:0`
+?e stack top is `pv4`
