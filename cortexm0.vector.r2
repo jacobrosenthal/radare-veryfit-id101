@@ -1,5 +1,9 @@
 
-# want a light touch in here, dont want to analyze functions, just flag
+# want a light touch in here, create functions as symbols so aa can find them
+# meant to be run possibly multiple times for different addresses like
+# . nrf51.vector.r2 @ 0x00018000
+# You should set your entry0 to one of the reset handlers you find outside here like
+# f entry0 @ sym.reset_handler_0x00018000
 # todo check that were arm and 16 bits and maybe something about the address and exit early somehow?
 
 #hack to store incoming address.. not sure how else
@@ -8,8 +12,10 @@ y 4
 # debatably necessary
 Cd 4 48
 
+fs symbols
+
 # store a var of the register were at, if gt 0 then flag it(minus 1 because thumb), increment 4
-"(cortexm0.vector.annotate x,?=`pxWq~:0`;?+f $0 @ `??`-1; s+4)"
+"(cortexm0.vector.annotate x,?=`pv4`;?+ f sym.$0 @ `??`-1; s+4)"
 
 f VectorTable_`y~[0]`
 
@@ -63,40 +69,9 @@ f initial_sp_`y~[0]`; s+4
 .(cortexm0.vector.annotate irq_31_handler_`y~[0]`)
 
 
-
-# seek to the reset_handler
-s reset_handler_`y~[0]`
-
-# seek to the last branch command's dest (one instruction before ie -2)
-s `pd 20~blx[0]`-2
-
-# now $m exists so label that address (minus-1 because thumb)
-f SystemInit_`y~[0]` @ `pxw 4 @ $m~[1]`-1
-
-
-
-# seek to the reset_handler
-s reset_handler_`y~[0]`
-
-# seek to the last branch command's dest (one instruction before ie -2)
-s `pd 20~bx[1]`-2
-
-# now $m exists so label that address (minus-1 because thumb)
-f startup_`y~[0]` @ `pxw 4 @ $m~[1]`-1
-
-
-
-# seek to the startup function
-s startup_`y~[0]`
-
-# seek to the last branch command's dest (one instruction before ie -2)
-s `pd 20~bx[1]`-2
-
-# now $m exists so label that address (minus-1 because thumb)
-f main_`y~[0]` @ `pxw 4 @ $m~[1]`-1
-
-
 #seek back to where we started
 s `y~[0]`
 
-?e stack top is `pxWq~:0`
+fs *
+
+?e stack top is `pv4`
